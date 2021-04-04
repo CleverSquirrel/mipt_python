@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 import builtins
 import collections
-import heapq  # noqa
+import email
 import importlib
 import sys
 from types import ModuleType
 from typing import Callable, List, Union
 
 
-def methods_importer(
-    method_name: str, modules: List[Union[str, ModuleType]]
-) -> List[Callable]:
-    callable_modules = []
+def methods_importer(method_name: str, modules: List[Union[str, ModuleType]]) -> List[Callable]:
+    callable_objects = []
     for module in modules:
         try:
             if isinstance(module, ModuleType):
@@ -22,34 +20,34 @@ def methods_importer(
                 raise TypeError("Must be list of strings or ModuleType")
 
             if callable(getattr(mod, method_name, None)):
-                callable_modules.append(mod)
+                callable_objects.append(getattr(mod, method_name, None))
 
-            # callable_modules.append(mod)
+            # callable_objects.append(getattr(mod, method_name, None))
 
         except ImportError:
             continue
 
-    return callable_modules
+    return callable_objects
 
 
-print(methods_importer("__import__", ["builtins"]))
-# [<module 'builtins' (built-in)>]
+print(methods_importer("__init__", ["builtins", "collections", "email"]))
+# [<method-wrapper '__init__' of module object at 0x7fc4fcd6b860>,
+# <method-wrapper '__init__' of module object at 0x7fc4fe037ea0>,
+# <method-wrapper '__init__' of module object at 0x7fc4fe06a040>]
 
-print(methods_importer("__import__", [builtins]))
-# [<module 'builtins' (built-in)>]
+print(methods_importer("__init__", [builtins, collections, email]))
+# [<method-wrapper '__init__' of module object at 0x7fc4fcd6b860>,
+# <method-wrapper '__init__' of module object at 0x7fc4fe037ea0>,
+# <method-wrapper '__init__' of module object at 0x7fc4fe06a040>]
 
 print(methods_importer("deque", ["collections"]))
-# [<module 'collections' from '/Library/Frameworks/Python.framework/Versions/
-# 3.9/lib/python3.9/collections/__init__.py'>]
+# [<class 'collections.deque'>]
 
 print(methods_importer("deque", [collections]))
-# [<module 'collections' from '/Library/Frameworks/Python.framework/Versions/
-# 3.9/lib/python3.9/collections/__init__.py'>]
+# [<class 'collections.deque'>]
 
-print(methods_importer("mime", ["email"]))
-# should be:
-# [<module 'email' from '/Library/Frameworks/Python.framework/Versions/3.9/
-# lib/python3.9/email/__init__.py'>]
+print(methods_importer("parser", [email]))
+# should be: class email.parser
 # why doesn't work?
 
 print(sys.meta_path)
