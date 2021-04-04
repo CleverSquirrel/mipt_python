@@ -19,10 +19,9 @@ def methods_importer(method_name: str, modules: List[Union[str, ModuleType]]) ->
             else:
                 raise TypeError("Must be list of strings or ModuleType")
 
-            if callable(getattr(mod, method_name, None)):
-                callable_objects.append(getattr(mod, method_name, None))
-
-            # callable_objects.append(getattr(mod, method_name, None))
+            callable_pointer = getattr(mod, method_name, None)
+            if callable(callable_pointer):
+                callable_objects.append(callable_pointer)
 
         except ImportError:
             continue
