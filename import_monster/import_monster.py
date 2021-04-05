@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import builtins
 import collections
-import email
+import email.mime
 import importlib
 import sys
 from types import ModuleType
@@ -45,7 +45,7 @@ print(methods_importer("deque", ["collections"]))
 print(methods_importer("deque", [collections]))
 # [<class 'collections.deque'>]
 
-print(methods_importer("parser", [email]))
+print(methods_importer("text", [email.mime]))
 # should be: class email.parser
 # why doesn't work?
 
