@@ -1,9 +1,17 @@
-PACKAGES="import_monster"
+REQUIREMENTS_DEV="requirements-dev.txt"
+REQUIREMENTS="requirements.txt"
+PACKAGE_NAME="import_monster"
 
-all: install-all black clean
+all: install black isort flake8 test clean
 
 black:
-	@black ${PACKAGES}
+	@black ${PACKAGE_NAME}
+
+isort:
+	@isort ${PACKAGE_NAME}
+
+flake8:
+	@flake8 ${PACKAGE_NAME}
 
 clean:
 	@rm -rf `find . -name __pycache__`
@@ -23,10 +31,23 @@ clean:
 	@rm -f .develop
 	@rm -f .flake
 
-install-dev:
-	@pip install -r requirements-dev.txt
+uninstall:
+	@pip uninstall ${PACKAGE_NAME} -y
 
-install-package:
-	@pip install -r requirements.txt
+install: uninstall
+	@pip install -r ${REQUIREMENTS}
+	@echo "Done"
 
-install-all: install-dev install-package
+install-dev: uninstall
+	@pip install -r ${REQUIREMENTS_DEV}
+	@pip install -e .
+
+install-all: install install-dev install-pre-commit
+
+install-pre-commit:
+	@pre-commit install
+
+test:
+	@py.test tests
+
+.PHONY: all black isort flake8 install install-dev install-all uninstall clean test
