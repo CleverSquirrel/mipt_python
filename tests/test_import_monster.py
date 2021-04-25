@@ -13,7 +13,6 @@ def test_methods_importer_imported_module_callable():
 
 def test_methods_importer_imported_module_not_callable():
     result = methods_importer("pi", [math])
-    print("result: ", result)
     assert result == []
 
 
