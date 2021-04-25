@@ -2,9 +2,9 @@ name: Github actions CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -14,7 +14,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.7'
+          python-version: "3.7"
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
         run: make install-dev
       - name: Test with pytest
