@@ -47,6 +47,9 @@ install-all: install install-dev install-pre-commit
 install-pre-commit:
 	@pre-commit install
 
+run-pre-commit:
+	@pre-commit run --all-files
+
 test:
 	@py.test tests
 
